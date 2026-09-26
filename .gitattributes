@@ -1,0 +1,2 @@
+# LF everywhere: the parity fixtures are compared byte for byte, and a CRLF checkout would break them.
+* text=auto eol=lf

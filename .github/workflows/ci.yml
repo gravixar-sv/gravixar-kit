@@ -1,0 +1,42 @@
+# PR and main-branch check. This repo is public, so unlike a private free-plan repo its checks can BLOCK:
+# once it exists on GitHub, require the `check` job on `main` in branch protection.
+#
+# `pnpm check` builds, typechecks each package's test/types.ts against the BUILT declarations (what a consumer
+# installs, including @ts-expect-error negatives that fail if a type is ever widened), then runs the tests
+# against dist. The theme parity test compares output with fixtures byte for byte; .gitattributes pins LF so a
+# Windows checkout can't break it.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: the job only reads the tree.
+permissions:
+  contents: read
+
+# A newer push supersedes an in-flight run on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # No `version:` key on purpose: pnpm/action-setup reads `packageManager` from package.json, and pinning it
+      # twice is the dual-version guard that has broken fleet CI before (ERR_PNPM_BAD_PM_VERSION).
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm check

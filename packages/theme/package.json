@@ -1,0 +1,39 @@
+{
+  "name": "@gravixar/theme",
+  "version": "0.1.0",
+  "description": "Design as data: colour and type presets rendered as CSS variables, with a contrast floor that fails the build, a no-flash preview script and a Tailwind v4 @theme block.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p test/tsconfig.json",
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gravixar-sv/gravixar-kit.git",
+    "directory": "packages/theme"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  }
+}
