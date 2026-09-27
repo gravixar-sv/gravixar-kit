@@ -21,7 +21,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p test/tsconfig.json",
-    "test": "node --test \"test/*.test.mjs\""
+    "test": "node --test \"test/*.test.mjs\"",
+    "prepack": "tsc -p tsconfig.json",
+    "prepublishOnly": "tsc -p tsconfig.json && tsc -p test/tsconfig.json && node --test \"test/*.test.mjs\""
   },
   "repository": {
     "type": "git",
@@ -29,8 +31,7 @@
     "directory": "packages/theme"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "devDependencies": {
     "tailwindcss": "^4.3.3",
