@@ -36,8 +36,10 @@ git tag theme-v0.1.1
 git push origin theme-v0.1.1
 ```
 
-The publish workflow checks the tag matches the version, runs the full check, and publishes through npm trusted
-publishing, so no npm token is stored anywhere and each version carries provenance.
+The publish workflow checks the tag matches the version, runs the full check, and stages the version through npm
+trusted publishing, so no npm token is stored anywhere. A staged version isn't public: a maintainer approves it with
+two-factor authentication on npmjs.com (Staged Packages → Approve), or with `npm stage approve <stage-id>`. CI can
+never publish on its own.
 
 ## License
 
