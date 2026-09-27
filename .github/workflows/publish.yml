@@ -1,0 +1,68 @@
+# Releases @gravixar/theme when a tag `theme-v<version>` is pushed. npm trusted publishing: the job proves who it
+# is with a GitHub OIDC token (`id-token: write`), so no npm token is stored anywhere, and npm adds provenance on
+# its own. It needs npm CLI 11.5.1+ (Node 24 ships it) and, once, the package's Trusted Publisher set to
+# gravixar-sv / gravixar-kit / publish.yml on npmjs.com.
+#
+# The first version (0.1.0) was published by hand, because npm configures a trusted publisher from an existing
+# package's settings. A tag for a version that is already on npm is skipped rather than failed.
+#
+# To release: bump `version` in packages/theme/package.json through a PR, merge it, then
+#   git tag theme-v<version> && git push origin theme-v<version>
+
+name: Publish
+
+on:
+  push:
+    tags: ["theme-v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  theme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # No `version:` key: pnpm/action-setup reads `packageManager` from package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm check
+
+      - name: The tag names the package's version
+        id: version
+        run: |
+          version="$(node -p "require('./packages/theme/package.json').version")"
+          if [ "theme-v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match @gravixar/theme ${version}"
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Skip a version that is already published
+        id: published
+        run: |
+          if npm view "@gravixar/theme@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
+            echo "::notice::@gravixar/theme@${{ steps.version.outputs.version }} is already on npm; nothing to publish"
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        if: steps.published.outputs.exists == 'false'
+        working-directory: packages/theme
+        run: npm publish --access public

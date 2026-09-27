@@ -25,6 +25,20 @@ pnpm install
 pnpm check   # build, typecheck the published declarations, test
 ```
 
+Changes reach `main` through pull requests, and CI must pass before one merges.
+
+## Release
+
+Bump `version` in the package's `package.json` through a pull request, merge it, then push a tag:
+
+```sh
+git tag theme-v0.1.1
+git push origin theme-v0.1.1
+```
+
+The publish workflow checks the tag matches the version, runs the full check, and publishes through npm trusted
+publishing, so no npm token is stored anywhere and each version carries provenance.
+
 ## License
 
 [MIT](LICENSE)
