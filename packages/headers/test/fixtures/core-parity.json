@@ -1,0 +1,1072 @@
+{
+  "about": "What Gravixar's private @gravixar-sv/core/headers returned for each case. Generated outside this repo, which never imports core. @gravixar/headers must return the same for every case (test/parity.test.mjs). {\"$undefined\": true} stands for undefined, which JSON cannot hold; the key is present. Error messages are recorded without the package-name prefix, which differs.",
+  "source": {"package":"@gravixar-sv/core","module":"headers","version":"0.8.3","unchangedSince":"0.8.0"},
+  "generated": "2026-09-29",
+  "defaults": {
+    "csp": {
+      "default-src": ["'self'"],
+      "script-src": ["'self'","'unsafe-inline'"],
+      "style-src": ["'self'","'unsafe-inline'"],
+      "font-src": ["'self'","data:"],
+      "img-src": ["'self'","data:","blob:","https://*.supabase.co"],
+      "connect-src": ["'self'","https://*.supabase.co","wss://*.supabase.co"],
+      "object-src": ["'none'"],
+      "base-uri": ["'self'"],
+      "form-action": ["'self'"],
+      "frame-ancestors": ["'none'"],
+      "upgrade-insecure-requests": []
+    },
+    "permissionsPolicy": {
+      "camera": [],
+      "microphone": [],
+      "geolocation": [],
+      "payment": [],
+      "usb": [],
+      "magnetometer": [],
+      "accelerometer": [],
+      "gyroscope": []
+    }
+  },
+  "cases": [
+    {
+      "name": "default: no argument",
+      "fn": "buildHeaders",
+      "args": [],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "default: undefined argument",
+      "fn": "buildHeaders",
+      "args": [{"$undefined":true}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "default: empty policy",
+      "fn": "buildHeaders",
+      "args": [{}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "default: every option undefined",
+      "fn": "buildHeaders",
+      "args": [{"hsts":{"$undefined":true},"contentTypeOptions":{"$undefined":true},"frameOptions":{"$undefined":true},"referrerPolicy":{"$undefined":true},"dnsPrefetchControl":{"$undefined":true},"permissionsPolicy":{"$undefined":true},"csp":{"$undefined":true},"cors":{"$undefined":true},"xRobotsTag":{"$undefined":true}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "hsts: one year, no preload",
+      "fn": "buildHeaders",
+      "args": [{"hsts":"max-age=31536000"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=31536000"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "hsts: one year with subdomains",
+      "fn": "buildHeaders",
+      "args": [{"hsts":"max-age=31536000; includeSubDomains"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=31536000; includeSubDomains"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "hsts: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"hsts":false}],
+      "result": [
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "hsts: an empty string is emitted as is",
+      "fn": "buildHeaders",
+      "args": [{"hsts":""}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":""},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "contentTypeOptions: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"contentTypeOptions":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "contentTypeOptions: true keeps it",
+      "fn": "buildHeaders",
+      "args": [{"contentTypeOptions":true}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "frameOptions: SAMEORIGIN",
+      "fn": "buildHeaders",
+      "args": [{"frameOptions":"SAMEORIGIN"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"SAMEORIGIN"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "frameOptions: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"frameOptions":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "referrerPolicy: no-referrer",
+      "fn": "buildHeaders",
+      "args": [{"referrerPolicy":"no-referrer"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "referrerPolicy: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"referrerPolicy":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "dnsPrefetchControl: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"dnsPrefetchControl":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "dnsPrefetchControl: true keeps it",
+      "fn": "buildHeaders",
+      "args": [{"dnsPrefetchControl":true}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: {} is the default",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: null is the default",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":null}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: merge same-origin camera and microphone",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":["self"],"microphone":["self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: merge appends new features after the defaults",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"fullscreen":["*"],"interest-cohort":[]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=(), fullscreen=*, interest-cohort=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: merge quotes an origin",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"geolocation":["https://maps.example.com"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(\"https://maps.example.com\"), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: merge mixes self, src and origins",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"payment":["self","https://pay.example.com"],"camera":["src"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(src), microphone=(), geolocation=(), payment=(self \"https://pay.example.com\"), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: a wildcard beside another token is quoted",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"usb":["*","self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(\"*\" self), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: a new key named first still lands after the defaults",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"screen-wake-lock":[],"camera":["self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=(), screen-wake-lock=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: an undefined feature keeps the default",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":{"$undefined":true}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: undefined beside a real override",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":{"$undefined":true},"microphone":["self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(self), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace with three features",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"camera":["self"],"microphone":["self"],"geolocation":[]}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(self), geolocation=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace with {} emits an empty value",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":""},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace drops an undefined feature",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"camera":["self"],"usb":{"$undefined":true}}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self)"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace undefined falls back to the default",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"$undefined":true}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace undefined beside a feature merges it",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"$undefined":true},"camera":["self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: replace wins over sibling keys",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"camera":[]},"microphone":["self"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "permissionsPolicy: a string allowlist throws",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":"self"}}],
+      "error": {"name":"TypeError","message":"Permissions-Policy feature \"camera\" must be an array of origins; received string. Use [] to deny (feature=()), or omit the key to keep the default."}
+    },
+    {
+      "name": "permissionsPolicy: a null allowlist throws",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":null}}],
+      "error": {"name":"TypeError","message":"Permissions-Policy feature \"camera\" must be an array of origins; received object. Use [] to deny (feature=()), or omit the key to keep the default."}
+    },
+    {
+      "name": "permissionsPolicy: a number in replace throws",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"camera":1}}}],
+      "error": {"name":"TypeError","message":"Permissions-Policy feature \"camera\" must be an array of origins; received number. Use [] to deny (feature=()), or omit the key to keep the default."}
+    },
+    {
+      "name": "csp: false omits it",
+      "fn": "buildHeaders",
+      "args": [{"csp":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"}
+      ]
+    },
+    {
+      "name": "csp: {} is the default",
+      "fn": "buildHeaders",
+      "args": [{"csp":{}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: null is the default",
+      "fn": "buildHeaders",
+      "args": [{"csp":null}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: development widens script-src with unsafe-eval",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":["'self'","'unsafe-inline'","'unsafe-eval'"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: development opens a websocket for hot reload",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"connect-src":["'self'","ws://localhost:3000"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' ws://localhost:3000; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: new directives are appended after the defaults",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"worker-src":["'self'","blob:"],"report-uri":["/api/csp-report"],"report-to":["csp-endpoint"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; worker-src 'self' blob:; report-uri /api/csp-report; report-to csp-endpoint"}
+      ]
+    },
+    {
+      "name": "csp: a new key named first still lands after the defaults",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"media-src":["'self'"],"default-src":["'none'"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; media-src 'self'"}
+      ]
+    },
+    {
+      "name": "csp: frame-ancestors allows one parent",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"frame-ancestors":["'self'","https://parent.example.com"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://parent.example.com; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: an explicit [] renders the bare directive",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":[]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: an undefined directive keeps the default",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":{"$undefined":true}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: undefined beside a real override",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":{"$undefined":true},"img-src":["'self'"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: replace with two directives",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"replace":{"default-src":["'self'"],"frame-ancestors":["'none'"]}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; frame-ancestors 'none'"}
+      ]
+    },
+    {
+      "name": "csp: replace with {} emits an empty value",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"replace":{}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":""}
+      ]
+    },
+    {
+      "name": "csp: replace drops an undefined directive",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"replace":{"default-src":["'self'"],"script-src":{"$undefined":true}}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'"}
+      ]
+    },
+    {
+      "name": "csp: replace undefined falls back to the default",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"replace":{"$undefined":true}}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: the default spread back in with one change",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"default-src":["'self'"],"script-src":["'self'","'unsafe-inline'"],"style-src":["'self'","'unsafe-inline'"],"font-src":["'self'","data:"],"img-src":["'self'","data:","blob:","https://*.supabase.co"],"connect-src":["'self'"],"object-src":["'none'"],"base-uri":["'self'"],"form-action":["'self'"],"frame-ancestors":["'none'"],"upgrade-insecure-requests":[]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "csp: a string directive throws",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":"'self'"}}],
+      "error": {"name":"TypeError","message":"CSP directive \"script-src\" must be an array of tokens; received string. Use [] for a bare directive (e.g. upgrade-insecure-requests), or omit the key to keep the default."}
+    },
+    {
+      "name": "csp: a null directive throws",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"script-src":null}}],
+      "error": {"name":"TypeError","message":"CSP directive \"script-src\" must be an array of tokens; received object. Use [] for a bare directive (e.g. upgrade-insecure-requests), or omit the key to keep the default."}
+    },
+    {
+      "name": "csp: a string in replace throws",
+      "fn": "buildHeaders",
+      "args": [{"csp":{"replace":{"default-src":"'self'"}}}],
+      "error": {"name":"TypeError","message":"CSP directive \"default-src\" must be an array of tokens; received string. Use [] for a bare directive (e.g. upgrade-insecure-requests), or omit the key to keep the default."}
+    },
+    {
+      "name": "cors: an origin string adds Vary",
+      "fn": "buildHeaders",
+      "args": [{"cors":"https://app.example.com"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "cors: vary false omits Vary",
+      "fn": "buildHeaders",
+      "args": [{"cors":{"origin":"https://app.example.com","vary":false}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"}
+      ]
+    },
+    {
+      "name": "cors: vary true keeps Vary",
+      "fn": "buildHeaders",
+      "args": [{"cors":{"origin":"https://app.example.com","vary":true}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "cors: vary defaults to true",
+      "fn": "buildHeaders",
+      "args": [{"cors":{"origin":"https://app.example.com"}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "cors: an empty origin adds nothing",
+      "fn": "buildHeaders",
+      "args": [{"cors":{"origin":""}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "cors: an empty string adds nothing",
+      "fn": "buildHeaders",
+      "args": [{"cors":""}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "cors: false adds nothing",
+      "fn": "buildHeaders",
+      "args": [{"cors":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "xRobotsTag: noindex, nofollow",
+      "fn": "buildHeaders",
+      "args": [{"xRobotsTag":"noindex, nofollow"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"X-Robots-Tag","value":"noindex, nofollow"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "xRobotsTag: noindex",
+      "fn": "buildHeaders",
+      "args": [{"xRobotsTag":"noindex"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"X-Robots-Tag","value":"noindex"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "xRobotsTag: false adds nothing",
+      "fn": "buildHeaders",
+      "args": [{"xRobotsTag":false}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "xRobotsTag: an empty string adds nothing",
+      "fn": "buildHeaders",
+      "args": [{"xRobotsTag":""}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "posture: private dashboard, merged",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"camera":["self"],"microphone":["self"]},"csp":false,"cors":false,"xRobotsTag":"noindex, nofollow"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"X-Robots-Tag","value":"noindex, nofollow"}
+      ]
+    },
+    {
+      "name": "posture: private dashboard, replaced",
+      "fn": "buildHeaders",
+      "args": [{"permissionsPolicy":{"replace":{"camera":["self"],"microphone":["self"],"geolocation":[]}},"csp":false,"cors":false,"xRobotsTag":"noindex, nofollow"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(self), geolocation=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"X-Robots-Tag","value":"noindex, nofollow"}
+      ]
+    },
+    {
+      "name": "posture: strict default with an API origin",
+      "fn": "buildHeaders",
+      "args": [{"cors":"https://app.example.com"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"DENY"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "posture: embeddable by one parent",
+      "fn": "buildHeaders",
+      "args": [{"frameOptions":false,"csp":{"frame-ancestors":["https://parent.example.com"]}}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=63072000; includeSubDomains; preload"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},
+        {"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors https://parent.example.com; upgrade-insecure-requests"}
+      ]
+    },
+    {
+      "name": "posture: every optional header off",
+      "fn": "buildHeaders",
+      "args": [{"hsts":false,"contentTypeOptions":false,"frameOptions":false,"referrerPolicy":false,"dnsPrefetchControl":false,"permissionsPolicy":false,"csp":false}],
+      "result": []
+    },
+    {
+      "name": "posture: only CORS and X-Robots-Tag",
+      "fn": "buildHeaders",
+      "args": [{"hsts":false,"contentTypeOptions":false,"frameOptions":false,"referrerPolicy":false,"dnsPrefetchControl":false,"permissionsPolicy":false,"csp":false,"cors":"https://app.example.com","xRobotsTag":"noindex"}],
+      "result": [
+        {"key":"X-Robots-Tag","value":"noindex"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "posture: every option set",
+      "fn": "buildHeaders",
+      "args": [{"hsts":"max-age=31536000","contentTypeOptions":true,"frameOptions":"SAMEORIGIN","referrerPolicy":"no-referrer","dnsPrefetchControl":true,"permissionsPolicy":{"camera":["self"],"fullscreen":["*"]},"csp":{"script-src":["'self'"],"worker-src":["blob:"]},"cors":{"origin":"https://app.example.com","vary":true},"xRobotsTag":"noindex, nofollow"}],
+      "result": [
+        {"key":"Strict-Transport-Security","value":"max-age=31536000"},
+        {"key":"X-Content-Type-Options","value":"nosniff"},
+        {"key":"X-Frame-Options","value":"SAMEORIGIN"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"Permissions-Policy","value":"camera=(self), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=(), fullscreen=*"},
+        {"key":"X-DNS-Prefetch-Control","value":"off"},
+        {"key":"X-Robots-Tag","value":"noindex, nofollow"},
+        {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; worker-src blob:"},
+        {"key":"Access-Control-Allow-Origin","value":"https://app.example.com"},
+        {"key":"Vary","value":"Origin"}
+      ]
+    },
+    {
+      "name": "serializeCsp: the default directives",
+      "fn": "serializeCsp",
+      "args": [{"default-src":["'self'"],"script-src":["'self'","'unsafe-inline'"],"style-src":["'self'","'unsafe-inline'"],"font-src":["'self'","data:"],"img-src":["'self'","data:","blob:","https://*.supabase.co"],"connect-src":["'self'","https://*.supabase.co","wss://*.supabase.co"],"object-src":["'none'"],"base-uri":["'self'"],"form-action":["'self'"],"frame-ancestors":["'none'"],"upgrade-insecure-requests":[]}],
+      "result": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+    },
+    {
+      "name": "serializeCsp: {} is an empty string",
+      "fn": "serializeCsp",
+      "args": [{}],
+      "result": ""
+    },
+    {
+      "name": "serializeCsp: a bare directive alone",
+      "fn": "serializeCsp",
+      "args": [{"upgrade-insecure-requests":[]}],
+      "result": "upgrade-insecure-requests"
+    },
+    {
+      "name": "serializeCsp: tokens and a bare directive",
+      "fn": "serializeCsp",
+      "args": [{"default-src":["'self'"],"img-src":["'self'","data:"],"upgrade-insecure-requests":[]}],
+      "result": "default-src 'self'; img-src 'self' data:; upgrade-insecure-requests"
+    },
+    {
+      "name": "serializeCsp: a number throws",
+      "fn": "serializeCsp",
+      "args": [{"script-src":1}],
+      "error": {"name":"TypeError","message":"CSP directive \"script-src\" must be an array of tokens; received number. Use [] for a bare directive (e.g. upgrade-insecure-requests), or omit the key to keep the default."}
+    },
+    {
+      "name": "serializeCsp: undefined throws (the serializer strips nothing)",
+      "fn": "serializeCsp",
+      "args": [{"script-src":{"$undefined":true}}],
+      "error": {"name":"TypeError","message":"CSP directive \"script-src\" must be an array of tokens; received undefined. Use [] for a bare directive (e.g. upgrade-insecure-requests), or omit the key to keep the default."}
+    },
+    {
+      "name": "serializePermissionsPolicy: the default policy",
+      "fn": "serializePermissionsPolicy",
+      "args": [{"camera":[],"microphone":[],"geolocation":[],"payment":[],"usb":[],"magnetometer":[],"accelerometer":[],"gyroscope":[]}],
+      "result": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
+    },
+    {
+      "name": "serializePermissionsPolicy: {} is an empty string",
+      "fn": "serializePermissionsPolicy",
+      "args": [{}],
+      "result": ""
+    },
+    {
+      "name": "serializePermissionsPolicy: deny, self, wildcard and an origin",
+      "fn": "serializePermissionsPolicy",
+      "args": [{"camera":[],"microphone":["self"],"fullscreen":["*"],"geolocation":["https://x.example.com"]}],
+      "result": "camera=(), microphone=(self), fullscreen=*, geolocation=(\"https://x.example.com\")"
+    },
+    {
+      "name": "serializePermissionsPolicy: src, and self beside a wildcard",
+      "fn": "serializePermissionsPolicy",
+      "args": [{"autoplay":["src"],"usb":["self","*"]}],
+      "result": "autoplay=(src), usb=(self \"*\")"
+    },
+    {
+      "name": "serializePermissionsPolicy: a string throws",
+      "fn": "serializePermissionsPolicy",
+      "args": [{"camera":"self"}],
+      "error": {"name":"TypeError","message":"Permissions-Policy feature \"camera\" must be an array of origins; received string. Use [] to deny (feature=()), or omit the key to keep the default."}
+    },
+    {
+      "name": "serializePermissionsPolicy: undefined throws (the serializer strips nothing)",
+      "fn": "serializePermissionsPolicy",
+      "args": [{"camera":{"$undefined":true}}],
+      "error": {"name":"TypeError","message":"Permissions-Policy feature \"camera\" must be an array of origins; received undefined. Use [] to deny (feature=()), or omit the key to keep the default."}
+    }
+  ]
+}
