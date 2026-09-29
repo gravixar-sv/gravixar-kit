@@ -377,3 +377,33 @@ test("BotID runs after the static gate, and fails open when it errors", async ()
   assert.equal((await form.submit(person(), { locale: "en" })).outcome, "delivered");
   assert.match(logs.error[0], /BotID check failed, so it was skipped: network down/);
 });
+
+// ---- the elapsed field --------------------------------------------------------------------------------------------
+
+test("a form that sends only the elapsed time is delivered, and the field never reaches the validator", async () => {
+  const store = memoryStore();
+  const form = defineForm({
+    name: "strict",
+    schema: z.strictObject({ name: z.string() }),
+    deliver: [blobStep({ store, path: () => "x.jsonl", required: true })],
+  });
+  const result = await form.submit({ name: "Jane", website: "", ts: "", te: "30000" }, { locale: "en" });
+  assert.equal(result.outcome, "delivered");
+  assert.deepEqual(JSON.parse(store.lines[0].line).data, { name: "Jane" });
+});
+
+test("a person whose clock runs 10 minutes fast is delivered when the form sends the elapsed time", async () => {
+  const { form } = enquiry();
+  const fast = { ...person(), ts: Date.now() + 10 * 60_000 - 30_000 };
+  assert.equal((await form.submit(fast, { locale: "en" })).reason, "ts_too_fast");
+  assert.equal((await form.submit({ ...fast, te: 30_000 }, { locale: "en" })).outcome, "delivered");
+});
+
+test("a schema that validates the elapsed field, or one name for two gate fields, is refused", () => {
+  assert.match(thrown(() => enquiry({ schema: z.object({ te: z.string() }) })).message, /validates "te"/);
+  assert.match(thrown(() => enquiry({ gate: { timeTrap: { elapsedField: "ts" } } })).message, /timestamp and the elapsed/);
+  assert.match(thrown(() => enquiry({ gate: { timeTrap: { elapsedField: "website" } } })).message, /honeypot and the elapsed/);
+  assert.match(thrown(() => enquiry({ gate: { honeypot: "te" } })).message, /honeypot and the elapsed/);
+  // A custom elapsed field frees "te" for the form's own use.
+  assert.equal(enquiry({ schema: z.object({ te: z.string() }), gate: { timeTrap: { elapsedField: "open_ms" } } }).form.name, "enquiry");
+});

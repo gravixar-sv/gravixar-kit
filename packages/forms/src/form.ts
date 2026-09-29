@@ -1,4 +1,4 @@
-import { HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD, TIMESTAMP_FIELD } from "./fields.js";
+import { ELAPSED_FIELD, HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD, TIMESTAMP_FIELD } from "./fields.js";
 import { checkGate, gateFields, type GateOptions } from "./gate.js";
 import { errorMessage, isProduction, randomId, stableId } from "./helpers.js";
 import { blobStep, emailStep, type BlobStepOptions, type EmailStepOptions } from "./steps.js";
@@ -96,10 +96,20 @@ export function defineForm<S extends StandardSchema>(definition: FormDefinition<
   if (repeated) throw new FormError(`${log} has two delivery steps named "${repeated}". Give one a \`name\`.`);
 
   const fields = gateFields(gate);
-  if (gate.honeypot !== false && gate.timeTrap !== false) {
+  if (gate.timeTrap !== false) {
     const timestamp = gate.timeTrap?.field ?? TIMESTAMP_FIELD;
-    if ([gate.honeypot ?? HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD].includes(timestamp)) {
-      throw new FormError(`${log} uses "${timestamp}" for both the honeypot and the timestamp.`);
+    const elapsed = gate.timeTrap?.elapsedField ?? ELAPSED_FIELD;
+    if (timestamp === elapsed) {
+      throw new FormError(`${log} uses "${timestamp}" for both the timestamp and the elapsed time.`);
+    }
+    if (gate.honeypot !== false) {
+      const honeypots = [gate.honeypot ?? HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD];
+      if (honeypots.includes(timestamp)) {
+        throw new FormError(`${log} uses "${timestamp}" for both the honeypot and the timestamp.`);
+      }
+      if (honeypots.includes(elapsed)) {
+        throw new FormError(`${log} uses "${elapsed}" for both the honeypot and the elapsed time.`);
+      }
     }
   }
   if (gate.timeTrap) {

@@ -17,8 +17,8 @@ booking endpoint behind BotID.
 
 ## Two entry points
 
-- `@gravixar/forms`: client-safe. The field names a form renders, and the types. A test walks this entry's module
-  graph and fails if it reaches server code, because a client component ships everything it imports.
+- `@gravixar/forms`: client-safe. The field names a form renders, the form clock, and the types. A test walks this
+  entry's module graph and fails if it reaches server code, because a client component ships everything it imports.
 - `@gravixar/forms/server`: everything that runs a submission.
 
 ## Define
@@ -39,7 +39,7 @@ export const enquiry = defineForm({
       email: z.union([z.literal(""), z.email(msg.email[locale])]),
       message: z.string().trim().min(1, msg.message[locale]).max(5000),
     }),
-  // Optional. Default: honeypot "website", time trap on "ts" (2 s to 24 h), no BotID.
+  // Optional. Default: honeypot "website", time trap on "te", else "ts" (2 s min; 24 h max for "ts"), no BotID.
   gate: { botId: checkBotId },
   // Optional: parts hashed into the id. Omit for a random id.
   dedupe: (data) => [normalizeEmail(data.email), data.name],
@@ -87,16 +87,58 @@ never `null`, and treats an empty file input as absent. List repeated fields in 
 ## Render
 
 ```tsx
-import { HONEYPOT_FIELD, TIMESTAMP_FIELD, honeypotInputProps } from "@gravixar/forms";
+"use client";
+import { useActionState, useEffect, useRef } from "react";
+import {
+  ELAPSED_FIELD,
+  TIMESTAMP_FIELD,
+  createFormClock,
+  honeypotInputProps,
+  type FormClock,
+  type FormState,
+} from "@gravixar/forms";
+import { submitEnquiry } from "@/app/actions";
 
-<div className="hp" aria-hidden="true">
-  <label>Website<input {...honeypotInputProps} /></label>
-</div>
-<input type="hidden" name={TIMESTAMP_FIELD} value={renderedAt} /> {/* Date.now(), set once on mount */}
+export function EnquiryForm() {
+  const [state, action] = useActionState(submitEnquiry, { status: "idle" } as FormState);
+  const clock = useRef<FormClock | null>(null);
+  useEffect(() => {
+    clock.current = createFormClock(); // when the form mounts
+  }, []);
+  useEffect(() => {
+    if (state.status === "ok") clock.current?.reset(); // a second enquiry from this tab is timed from now
+  }, [state]);
+
+  return (
+    <form action={action} onSubmit={(e) => clock.current?.stamp(e.currentTarget)}>
+      {/* the form's own fields */}
+      <div className="hp" aria-hidden="true">
+        <label>Website<input {...honeypotInputProps} /></label>
+      </div>
+      <input type="hidden" name={TIMESTAMP_FIELD} />
+      <input type="hidden" name={ELAPSED_FIELD} />
+    </form>
+  );
+}
 ```
 
-Put the honeypot off-screen with CSS, not `display: none`, which some bots skip. **A form without the timestamp is
-ignored**, so add it before switching a live form over.
+Put the honeypot off-screen with CSS, not `display: none`, which some bots skip.
+
+`createFormClock()` has no dependencies and no React in it. `stamp(form)` writes both time fields into the form's
+inputs when it is submitted, adding a hidden input for either one the form doesn't render. React builds a form
+action's `FormData` after `onSubmit` runs, so the stamped values are the ones sent. A form that posts with `fetch`
+calls `clock.stamp(formData)` instead, which sets both fields on its `FormData`. `clock.fields()` returns them as
+`{ ts, te }`.
+
+**Why two time fields.** `ts` is the time the form opened by the device's clock, and the gate compares it with the
+server's clock. A phone whose clock runs a few minutes fast makes a person look faster than two seconds, and one
+whose tab stayed open for more than a day looks stale. Either way the gate ignores them while they see "sent".
+`te` is how long the form was open, measured in the browser from start to finish, so a wrong clock cancels out, and
+it has no age limit. **When a form sends a usable `te` (a finite, non-negative number), the gate uses it and
+ignores `ts`. Otherwise, whether `te` is missing or unusable, `ts` is checked as before.** An unusable `te` is
+never rejected on its own: a hand-rolled timer can go negative when the device's clock is corrected, and a bot gains
+nothing because it could leave `te` out. A form that sends neither field is ignored, so add them before switching a
+live form over. Send both: `ts` keeps the form working against a server still on 0.1.
 
 ## Delivery steps
 

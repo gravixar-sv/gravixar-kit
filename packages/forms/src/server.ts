@@ -15,6 +15,6 @@ export { fromFormData, metaFromHeaders, normalizeEmail, stableId } from "./helpe
 export type { FormValue } from "./helpers.js";
 export { blobStep, emailStep, resendMailer, toAttachments } from "./steps.js";
 export type { Attachment, BlobStepOptions, EmailStepOptions, LineStore, MailMessage, Mailer, ResendClient } from "./steps.js";
-export { HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD, TIMESTAMP_FIELD, honeypotInputProps } from "./fields.js";
+export { ELAPSED_FIELD, HONEYPOT_FIELD, LEGACY_HONEYPOT_FIELD, TIMESTAMP_FIELD, honeypotInputProps } from "./fields.js";
 export type { StandardIssue, StandardResult, StandardSchema } from "./standard-schema.js";
 export type { Evidence, FormState, GateReason, Submission, SubmissionMeta, SubmitResult } from "./types.js";
