@@ -1,4 +1,6 @@
-# Stages @gravixar/theme for release when a tag `theme-v<version>` is pushed. Nothing goes public from here: the
+# Stages a package for release when a tag `<package>-v<version>` is pushed: `theme-v0.1.1` stages @gravixar/theme
+# 0.1.1, `forms-v0.1.1` stages @gravixar/forms 0.1.1. Each package has its own stage-only trusted publisher on
+# npmjs.com, pointing at this workflow. Nothing goes public from here: the
 # Trusted Publisher on npmjs.com is stage-only ("Allow npm publish" unchecked), so this job can only stage, and the
 # version waits until a maintainer approves it with two-factor authentication, on npmjs.com (Staged Packages →
 # Approve) or with `npm stage approve <stage-id>`. A compromised CI or GitHub account can't publish on its own.
@@ -7,18 +9,18 @@
 # `npm stage publish` needs npm 11.15.0 or later, so the job installs a pinned npm instead of relying on the one
 # bundled with Node.
 #
-# The first version (0.1.0) was published by hand, because npm configures a trusted publisher from an existing
+# A package's first version is published by hand, because npm configures a trusted publisher from an existing
 # package's settings. A tag for a version that is already on npm is skipped rather than failed.
 #
-# To release: bump `version` in packages/theme/package.json through a PR, merge it, then
-#   git tag theme-v<version> && git push origin theme-v<version>
+# To release: bump `version` in packages/<package>/package.json through a PR, merge it, then
+#   git tag <package>-v<version> && git push origin <package>-v<version>
 # and approve the staged version on npmjs.com.
 
 name: Publish
 
 on:
   push:
-    tags: ["theme-v*"]
+    tags: ["theme-v*", "forms-v*"]
 
 permissions:
   contents: read
@@ -29,7 +31,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  theme:
+  stage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -50,21 +52,32 @@ jobs:
 
       - run: pnpm check
 
-      - name: The tag names the package's version
+      # The package comes from a fixed list, never straight from the tag, so a tag can't point the job anywhere else.
+      - name: The tag names a package and its version
         id: version
         run: |
-          version="$(node -p "require('./packages/theme/package.json').version")"
-          if [ "theme-v${version}" != "${GITHUB_REF_NAME}" ]; then
-            echo "::error::Tag ${GITHUB_REF_NAME} does not match @gravixar/theme ${version}"
+          case "${GITHUB_REF_NAME}" in
+            theme-v*) package=theme ;;
+            forms-v*) package=forms ;;
+            *) echo "::error::Tag ${GITHUB_REF_NAME} names no package"; exit 1 ;;
+          esac
+          name="$(node -p "require('./packages/${package}/package.json').name")"
+          version="$(node -p "require('./packages/${package}/package.json').version")"
+          if [ "${package}-v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match ${name} ${version}"
             exit 1
           fi
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          {
+            echo "package=${package}"
+            echo "name=${name}"
+            echo "version=${version}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Skip a version that is already published
         id: published
         run: |
-          if npm view "@gravixar/theme@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
-            echo "::notice::@gravixar/theme@${{ steps.version.outputs.version }} is already on npm; nothing to stage"
+          if npm view "${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
+            echo "::notice::${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }} is already on npm; nothing to stage"
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
@@ -72,11 +85,11 @@ jobs:
 
       - name: Stage for approval
         if: steps.published.outputs.exists == 'false'
-        working-directory: packages/theme
+        working-directory: packages/${{ steps.version.outputs.package }}
         run: |
           npm stage publish . --access public
           {
-            echo "### @gravixar/theme@${{ steps.version.outputs.version }} is staged, not public"
+            echo "### ${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }} is staged, not public"
             echo "Approve it with two-factor authentication on npmjs.com (Staged Packages → Approve),"
-            echo "or run \`npm stage list @gravixar/theme\` and \`npm stage approve <stage-id>\`."
+            echo "or run \`npm stage list ${{ steps.version.outputs.name }}\` and \`npm stage approve <stage-id>\`."
           } >> "$GITHUB_STEP_SUMMARY"
