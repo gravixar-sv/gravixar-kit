@@ -1,6 +1,6 @@
 # Stages a package for release when a tag `<package>-v<version>` is pushed: `theme-v0.1.1` stages @gravixar/theme
-# 0.1.1, `forms-v0.1.1` stages @gravixar/forms 0.1.1. Each package has its own stage-only trusted publisher on
-# npmjs.com, pointing at this workflow. Nothing goes public from here: the
+# 0.1.1, `forms-v0.1.1` stages @gravixar/forms 0.1.1, `headers-v0.1.1` stages @gravixar/headers 0.1.1. Each package
+# has its own stage-only trusted publisher on npmjs.com, pointing at this workflow. Nothing goes public from here: the
 # Trusted Publisher on npmjs.com is stage-only ("Allow npm publish" unchecked), so this job can only stage, and the
 # version waits until a maintainer approves it with two-factor authentication, on npmjs.com (Staged Packages →
 # Approve) or with `npm stage approve <stage-id>`. A compromised CI or GitHub account can't publish on its own.
@@ -20,7 +20,7 @@ name: Publish
 
 on:
   push:
-    tags: ["theme-v*", "forms-v*"]
+    tags: ["theme-v*", "forms-v*", "headers-v*"]
 
 permissions:
   contents: read
@@ -59,6 +59,7 @@ jobs:
           case "${GITHUB_REF_NAME}" in
             theme-v*) package=theme ;;
             forms-v*) package=forms ;;
+            headers-v*) package=headers ;;
             *) echo "::error::Tag ${GITHUB_REF_NAME} names no package"; exit 1 ;;
           esac
           name="$(node -p "require('./packages/${package}/package.json').name")"

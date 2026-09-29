@@ -7,6 +7,7 @@ without a token, so a client who leaves keeps the code and their site keeps buil
 |---|---|
 | [`@gravixar/theme`](packages/theme) | 0.1.0. Design as data: presets rendered as CSS variables, a contrast floor that fails the build, a no-flash preview script, a Tailwind v4 `@theme` block. |
 | [`@gravixar/forms`](packages/forms) | 0.1.0, not yet published. Form submissions for server actions: a bot gate before validation, any Standard Schema validator, stable ids, delivery that fails closed in production. |
+| [`@gravixar/headers`](packages/headers) | 0.1.0, not yet published. Security headers for a Next.js `headers()` entry: a strict default (HSTS, CSP, a deny-all Permissions-Policy) that a site overrides one slice at a time. |
 | `@gravixar/i18n` | API draft: [docs/i18n-api.md](docs/i18n-api.md). Not built yet. |
 
 ## Rules

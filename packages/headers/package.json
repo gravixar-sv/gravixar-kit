@@ -1,0 +1,39 @@
+{
+  "name": "@gravixar/headers",
+  "version": "0.1.0",
+  "description": "Security headers for a Next.js headers() entry: a strict default (HSTS, CSP, a deny-all Permissions-Policy, nosniff, DENY framing) that a site overrides one slice at a time.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p test/tsconfig.json",
+    "test": "node --test \"test/*.test.mjs\"",
+    "prepack": "tsc -p tsconfig.json",
+    "prepublishOnly": "tsc -p tsconfig.json && tsc -p test/tsconfig.json && node --test \"test/*.test.mjs\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gravixar-sv/gravixar-kit.git",
+    "directory": "packages/headers"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
