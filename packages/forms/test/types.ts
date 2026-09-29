@@ -2,10 +2,19 @@
 // negative test: if the types stop rejecting that line, the directive goes unused and the typecheck fails.
 import { Resend } from "resend";
 import { z } from "zod";
-import { HONEYPOT_FIELD, honeypotInputProps, type FormState } from "../dist/index.js";
+import {
+  createFormClock,
+  ELAPSED_FIELD,
+  HONEYPOT_FIELD,
+  honeypotInputProps,
+  TIMESTAMP_FIELD,
+  type FormClock,
+  type FormState,
+} from "../dist/index.js";
 import {
   blobStep,
   defineForm,
+  ELAPSED_FIELD as SERVER_ELAPSED_FIELD,
   emailStep,
   fromFormData,
   metaFromHeaders,
@@ -119,3 +128,32 @@ void wrong;
 
 // @ts-expect-error a mailer needs a sender
 resendMailer({ Resend });
+
+// The form clock, from the client entry. Its fields are named for the gate.
+
+const clock: FormClock = createFormClock();
+const timeFields: Record<typeof TIMESTAMP_FIELD | typeof ELAPSED_FIELD, string> = clock.fields();
+const elapsedName: "te" = ELAPSED_FIELD;
+const sameName: typeof ELAPSED_FIELD = SERVER_ELAPSED_FIELD;
+clock.stamp(new FormData());
+clock.stamp(document.createElement("form"));
+clock.reset();
+void [timeFields, elapsedName, sameName];
+
+defineForm({
+  name: "elapsed",
+  schema: z.object({ name: z.string() }),
+  gate: { timeTrap: { elapsedField: "open_ms", minMs: 3_000 } },
+  deliver: [blobStep({ store, path: () => "x", required: true })],
+});
+
+// @ts-expect-error stamp needs a FormData or a form element
+clock.stamp({ te: "1" });
+
+defineForm({
+  name: "switch",
+  schema: z.object({ name: z.string() }),
+  // @ts-expect-error the elapsed field is a name, not a switch
+  gate: { timeTrap: { elapsedField: false } },
+  deliver: [blobStep({ store, path: () => "x", required: true })],
+});

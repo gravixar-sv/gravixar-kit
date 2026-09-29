@@ -1,6 +1,6 @@
 # `@gravixar/forms`: API draft
 
-**Status: built as `@gravixar/forms` 0.1.0** ([packages/forms](../packages/forms)); where the build differs from
+**Status: built as `@gravixar/forms` 0.2.0** ([packages/forms](../packages/forms)); where the build differs from
 this draft is listed at the end. Everything here is extracted from forms already running on live sites: a
 bilingual enquiry form (email only), a registration form (stored for a CRM, deduplicated) and a booking
 endpoint (the bot gate plus BotID). Nothing is invented except where marked **new**, and each of those closes a
@@ -78,7 +78,8 @@ interface FormDefinition<T> {
   schema: StandardSchema<T> | ((ctx: { locale: string }) => StandardSchema<T>);
   gate?: {
     honeypot?: string | false;                         // default "website"
-    timeTrap?: { field?: string; minMs?: number; maxAgeMs?: number } | false;   // default { "ts", 2000, 24 h }
+    timeTrap?: { field?: string; elapsedField?: string; minMs?: number; maxAgeMs?: number } | false;
+                                                       // default { "ts", "te", 2000, 24 h }
     botId?: () => Promise<BotIdVerdict>;               // block unverified bots (for forms that email an address the caller supplies)
   };
   dedupe?: (data: T) => readonly string[];             // hashed to a 32-hex-char id; omit for a random id
@@ -143,14 +144,16 @@ success without an API key, so every enquiry is lost with nothing showing.
 ```ts
 export const HONEYPOT_FIELD = "website";
 export const TIMESTAMP_FIELD = "ts";
+export const ELAPSED_FIELD = "te";
+export function createFormClock(): FormClock;   // { fields(): { ts, te }; stamp(form or FormData); reset() }
 export type { FormState, SubmitResult };
 ```
 
 The form renders the honeypot off-screen, as the live forms do, rather than with `display: none`, which some
 bots skip. The build adds `tabIndex={-1}` and `autoComplete="off"` so keyboard users and autofill stay out of it.
-A hidden `ts` is set once, when the form mounts. Nothing in this entry may import a Node
-builtin. The package's tests include the check a live site already runs: build a page that renders a form, and
-fail if any client chunk contains server code.
+`createFormClock()` is created when the form mounts, and stamps `ts` and `te` into the form when it is submitted
+(see the last section). Nothing in this entry may import a Node builtin. The package's tests include the check a
+live site already runs: build a page that renders a form, and fail if any client chunk contains server code.
 
 ### Helpers, extracted as they are
 
@@ -169,8 +172,9 @@ working. Its honeypot field name, `hp_website`, stays accepted as an alias.
 1. **Rate limiting.** No live form has it, so it isn't in v0 by the extraction rule. The hook is
    `gate.limit?: (key: string) => Promise<boolean>`, keyed by IP and form. The first site that needs a store (the
    forms that email a caller-supplied address are the candidates) generalises it.
-2. **A signed timestamp.** `ts` is set by the client and unsigned, so a bot can forge it, and a fast client clock
-   trips it. A server-issued HMAC token would fix both. Not live anywhere yet.
+2. **A signed timestamp.** `ts` and `te` are set by the client and unsigned, so a bot can forge them. A
+   server-issued HMAC token would fix that. Not live anywhere yet. A fast client clock no longer trips the trap
+   when the form sends `te` (see the last section).
 3. **Retention.** The inbox (Phase 2) needs a retention period per form for UAE PDPL. It belongs to the storage
    step, not the gate.
 
@@ -194,3 +198,11 @@ working. Its honeypot field name, `hp_website`, stays accepted as an alias.
 - **BotID fails open**: if the check throws, the error is logged and the submission goes on, because the static gate
   has already passed and dropping a person silently is the worse failure.
 - **Added:** `metaFromHeaders`, `toAttachments`, `checkGate` on its own, and `honeypotInputProps` in the client entry.
+- **The time trap reads an elapsed time (0.2.0).** `ts` is the device's clock, compared with the server's, so a
+  phone whose clock ran minutes fast made a person look too fast, and a tab left open for more than a day looked
+  stale. The gate ignored both while the visitor saw "sent". `te` (`ELAPSED_FIELD`) is how long the form was
+  open, measured in the browser with `performance.now()`, so a wrong clock cancels out. When a form sends `te`,
+  the gate checks only that `te >= minMs`: no age limit, and `ts` isn't needed. A `te` that isn't a finite,
+  non-negative number is `ts_invalid`. **When `te` is absent, `ts` is checked exactly as in 0.1.0**, so a form
+  that sends only `ts` behaves as before. `createFormClock()` in the client entry sends both. The trap is a cheap
+  filter for naive bots, not a security boundary, so it must never drop a person.

@@ -25,9 +25,9 @@ function graph(entry, seen = new Map()) {
   return seen;
 }
 
-test("the client entry reaches only the field names", () => {
+test("the client entry reaches only the field names and the form clock", () => {
   const modules = graph(join(dist, "index.js"));
-  assert.deepEqual([...modules.keys()].map((file) => relative(dist, file)).sort(), ["fields.js", "index.js"]);
+  assert.deepEqual([...modules.keys()].map((file) => relative(dist, file)).sort(), ["clock.js", "fields.js", "index.js"]);
 });
 
 test("nothing the client entry reaches touches a server API", () => {
@@ -38,10 +38,17 @@ test("nothing the client entry reaches touches a server API", () => {
   }
 });
 
-test("the client entry exports the field names a form renders", () => {
-  assert.deepEqual(Object.keys(client).sort(), ["HONEYPOT_FIELD", "TIMESTAMP_FIELD", "honeypotInputProps"]);
+test("the client entry exports the field names a form renders, and the form clock", () => {
+  assert.deepEqual(Object.keys(client).sort(), [
+    "ELAPSED_FIELD",
+    "HONEYPOT_FIELD",
+    "TIMESTAMP_FIELD",
+    "createFormClock",
+    "honeypotInputProps",
+  ]);
   assert.equal(client.HONEYPOT_FIELD, "website");
   assert.equal(client.TIMESTAMP_FIELD, "ts");
+  assert.equal(client.ELAPSED_FIELD, "te");
   assert.deepEqual(client.honeypotInputProps, { name: "website", tabIndex: -1, autoComplete: "off" });
 });
 
