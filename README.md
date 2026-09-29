@@ -6,7 +6,7 @@ without a token, so a client who leaves keeps the code and their site keeps buil
 | Package | Status |
 |---|---|
 | [`@gravixar/theme`](packages/theme) | 0.1.0. Design as data: presets rendered as CSS variables, a contrast floor that fails the build, a no-flash preview script, a Tailwind v4 `@theme` block. |
-| `@gravixar/forms` | API draft: [docs/forms-api.md](docs/forms-api.md). Not built yet. |
+| [`@gravixar/forms`](packages/forms) | 0.1.0, not yet published. Form submissions for server actions: a bot gate before validation, any Standard Schema validator, stable ids, delivery that fails closed in production. |
 | `@gravixar/i18n` | API draft: [docs/i18n-api.md](docs/i18n-api.md). Not built yet. |
 
 ## Rules
@@ -29,12 +29,16 @@ Changes reach `main` through pull requests, and CI must pass before one merges.
 
 ## Release
 
-Bump `version` in the package's `package.json` through a pull request, merge it, then push a tag:
+Bump `version` in the package's `package.json` through a pull request, merge it, then push a tag named for the
+package and version:
 
 ```sh
 git tag theme-v0.1.1
 git push origin theme-v0.1.1
 ```
+
+A package's first version is published by hand, because npm configures a trusted publisher from an existing
+package's settings. Tags then stage every later version.
 
 The publish workflow checks the tag matches the version, runs the full check, and stages the version through npm
 trusted publishing, so no npm token is stored anywhere. A staged version isn't public: a maintainer approves it with

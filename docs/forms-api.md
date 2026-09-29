@@ -1,6 +1,7 @@
 # `@gravixar/forms`: API draft
 
-**Status: draft, not built.** Everything here is extracted from forms already running on live sites: a
+**Status: built as `@gravixar/forms` 0.1.0** ([packages/forms](../packages/forms)); where the build differs from
+this draft is listed at the end. Everything here is extracted from forms already running on live sites: a
 bilingual enquiry form (email only), a registration form (stored for a CRM, deduplicated) and a booking
 endpoint (the bot gate plus BotID). Nothing is invented except where marked **new**, and each of those closes a
 failure one of those sites has shown.
@@ -172,3 +173,24 @@ working. Its honeypot field name, `hp_website`, stays accepted as an alias.
    trips it. A server-issued HMAC token would fix both. Not live anywhere yet.
 3. **Retention.** The inbox (Phase 2) needs a retention period per form for UAE PDPL. It belongs to the storage
    step, not the gate.
+
+## Where the build differs from this draft
+
+- **`deliver` is a function of the step builders**, `({ email, blob }) => [...]`. TypeScript checks a generic call
+  such as `emailStep({...})` inside a plain array before it knows the schema's output, so the step's callbacks
+  would see `unknown`. The builders are bound to the output. A plain array still works for steps that are already
+  typed.
+- **A step's `run` returns `{ ok: true, ref? } | { ok: false, error }`**, and the form adds the step's name and time
+  to make the evidence. A step may also say what it `needs` (`"RESEND_API_KEY"`), which is what the log names.
+- **`resendMailer({ Resend, ... })` takes the SDK's class**, so the package has no dependency on `resend`. It sends
+  attachment bytes as base64: the SDK puts `content` into a JSON body as it is.
+- **`blobStep` takes a `LineStore`**, `{ configured(), appendLine(path, line) }`, rather than a storage client, and
+  `toLine` returns the record to write.
+- **Evidence has `dryRun: true`** for a step that wasn't configured outside production.
+- **Production** is `VERCEL_ENV=production` on Vercel (its previews set `NODE_ENV=production` too), and
+  `NODE_ENV=production` elsewhere.
+- **`fromFormData` treats an empty file input as absent**: browsers send a zero-byte `File` when nothing is chosen.
+- **`hp_website` is checked whenever the honeypot is on**, and removed before validation like the other gate fields.
+- **BotID fails open**: if the check throws, the error is logged and the submission goes on, because the static gate
+  has already passed and dropping a person silently is the worse failure.
+- **Added:** `metaFromHeaders`, `toAttachments`, `checkGate` on its own, and `honeypotInputProps` in the client entry.
