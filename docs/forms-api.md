@@ -203,6 +203,8 @@ working. Its honeypot field name, `hp_website`, stays accepted as an alias.
   stale. The gate ignored both while the visitor saw "sent". `te` (`ELAPSED_FIELD`) is how long the form was
   open, measured in the browser with `performance.now()`, so a wrong clock cancels out. When a form sends `te`,
   the gate checks only that `te >= minMs`: no age limit, and `ts` isn't needed. A `te` that isn't a finite,
-  non-negative number is `ts_invalid`. **When `te` is absent, `ts` is checked exactly as in 0.1.0**, so a form
-  that sends only `ts` behaves as before. `createFormClock()` in the client entry sends both. The trap is a cheap
-  filter for naive bots, not a security boundary, so it must never drop a person.
+  non-negative number is ignored, exactly as if it were absent: rejecting it would drop a person whose hand-rolled
+  timer went negative after a clock correction, and a bot gains nothing because it could leave `te` out. **Without
+  a usable `te`, `ts` is checked exactly as in 0.1.0**, so a form that sends only `ts` behaves as before.
+  `createFormClock()` in the client entry sends both. The trap is a cheap filter for naive bots, not a security
+  boundary, so it must never drop a person.

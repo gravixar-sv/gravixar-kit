@@ -134,9 +134,11 @@ calls `clock.stamp(formData)` instead, which sets both fields on its `FormData`.
 server's clock. A phone whose clock runs a few minutes fast makes a person look faster than two seconds, and one
 whose tab stayed open for more than a day looks stale. Either way the gate ignores them while they see "sent".
 `te` is how long the form was open, measured in the browser from start to finish, so a wrong clock cancels out, and
-it has no age limit. **When a form sends `te`, the gate uses it and ignores `ts`. A form that sends only `ts` is
-checked as before**, and one that sends neither is ignored, so add the fields before switching a live form over.
-Send both: `ts` keeps the form working against a server still on 0.1.
+it has no age limit. **When a form sends a usable `te` (a finite, non-negative number), the gate uses it and
+ignores `ts`. Otherwise, whether `te` is missing or unusable, `ts` is checked as before.** An unusable `te` is
+never rejected on its own: a hand-rolled timer can go negative when the device's clock is corrected, and a bot gains
+nothing because it could leave `te` out. A form that sends neither field is ignored, so add them before switching a
+live form over. Send both: `ts` keeps the form working against a server still on 0.1.
 
 ## Delivery steps
 

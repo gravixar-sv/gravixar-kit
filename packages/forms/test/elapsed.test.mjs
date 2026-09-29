@@ -45,21 +45,41 @@ test("when both are sent, the elapsed time decides and the timestamp is ignored"
   assert.equal(tripped({ te: 500, ts: NOW - 30_000 }), "ts_too_fast"); // a fast bot with a plausible timestamp
 });
 
-test("an elapsed time that isn't a finite, non-negative number is invalid, whatever the timestamp says", () => {
-  const ts = NOW - 30_000;
-  for (const te of ["soon", "Infinity", "-Infinity", "NaN", Infinity, NaN, -1, "-5000", {}, [], ["30000"], true]) {
-    assert.equal(tripped({ te, ts }), "ts_invalid", `te = ${String(te)}`);
+// Every timestamp outcome, and what the gate says with no elapsed field at all.
+const TIMESTAMP_CASES = [
+  [{ ts: NOW - 10_000 }, { ok: true }],
+  [{}, { ok: false, reason: "ts_missing" }],
+  [{ ts: "yesterday" }, { ok: false, reason: "ts_invalid" }],
+  [{ ts: NOW + 60_000 }, { ok: false, reason: "ts_too_fast" }],
+  [{ ts: NOW - MAX_FORM_AGE_MS - 1 }, { ok: false, reason: "ts_stale" }],
+];
+
+// Absent, blank, or not a finite non-negative number. A hand-rolled `Date.now() - mount` goes negative when the
+// device's clock is corrected mid-fill, so an unusable value is ignored, never rejected: rejecting it would drop a
+// person, and a bot gains nothing from the fallback because it could leave the field out.
+const UNUSABLE = [
+  undefined, null, "", "   ",
+  "soon", "Infinity", "-Infinity", "NaN", Infinity, -Infinity, NaN,
+  -1, "-5000", -0.5,
+  {}, [], ["30000"], true, false,
+];
+
+test("with no elapsed field, the timestamp is checked as in 0.1.0", () => {
+  for (const [input, expected] of TIMESTAMP_CASES) assert.deepEqual(gate(input), expected, JSON.stringify(input));
+});
+
+test("an unusable elapsed time is ignored: the gate says exactly what it says without one", () => {
+  for (const te of UNUSABLE) {
+    for (const [input, expected] of TIMESTAMP_CASES) {
+      const label = `te = ${typeof te === "object" ? JSON.stringify(te) : String(te)}, ${JSON.stringify(input)}`;
+      assert.deepEqual(gate({ ...input, te }), expected, label);
+      assert.deepEqual(gate({ ...input, te }), gate(input), label);
+    }
   }
 });
 
-test("an absent elapsed time falls back to the timestamp, unchanged", () => {
-  for (const te of [undefined, null, ""]) {
-    assert.deepEqual(gate({ te, ts: NOW - 10_000 }), { ok: true });
-    assert.equal(tripped({ te }), "ts_missing");
-    assert.equal(tripped({ te, ts: "yesterday" }), "ts_invalid");
-    assert.equal(tripped({ te, ts: NOW + 60_000 }), "ts_too_fast");
-    assert.equal(tripped({ te, ts: NOW - MAX_FORM_AGE_MS - 1 }), "ts_stale");
-  }
+test("a negative elapsed time from a clock corrected mid-fill falls back to a good timestamp", () => {
+  assert.deepEqual(gate({ te: "-599970000", ts: NOW - 30_000 }), { ok: true });
 });
 
 test("the field and the minimum can be set, and turning the trap off ignores it", () => {
