@@ -7,16 +7,17 @@
 export const HONEYPOT_FIELD = "website";
 
 /**
- * The time the form was rendered, in Unix milliseconds, set once when the form mounts. It is the browser's clock
- * compared with the server's, so a device clock that is minutes off skews it. The gate uses it only when
- * `ELAPSED_FIELD` is absent or unusable.
+ * When the form opened, in Unix milliseconds by the device's clock. `createFormClock()` sets it to when the page began
+ * to load. The gate compares it with the server's clock, so a device clock that is minutes off skews it, and uses it
+ * only when `ELAPSED_FIELD` is absent or unusable.
  */
 export const TIMESTAMP_FIELD = "ts";
 
 /**
  * How long the form was open, in milliseconds, measured in the browser at submit. Both ends of the measurement are
  * the browser's clock, so a device clock that is off doesn't change it. When it is a finite, non-negative number
- * the gate uses it instead of `TIMESTAMP_FIELD`; anything else is ignored. `createFormClock()` sets both.
+ * the gate uses it instead of `TIMESTAMP_FIELD`; anything else is ignored. `createFormClock()` sets both, timing from
+ * when the page began to load.
  */
 export const ELAPSED_FIELD = "te";
 

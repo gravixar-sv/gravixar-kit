@@ -1,6 +1,6 @@
 {
   "name": "@gravixar/forms",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Public form submissions for server actions: a bot gate that runs before validation, any Standard Schema validator, stable ids for dedupe, and delivery steps that fail closed in production.",
   "license": "MIT",
   "type": "module",
