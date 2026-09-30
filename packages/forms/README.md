@@ -103,7 +103,7 @@ export function EnquiryForm() {
   const [state, action] = useActionState(submitEnquiry, { status: "idle" } as FormState);
   const clock = useRef<FormClock | null>(null);
   useEffect(() => {
-    clock.current = createFormClock(); // when the form mounts
+    clock.current = createFormClock(); // the first submission is timed from page load, not from here
   }, []);
   useEffect(() => {
     if (state.status === "ok") clock.current?.reset(); // a second enquiry from this tab is timed from now
@@ -129,6 +129,12 @@ inputs when it is submitted, adding a hidden input for either one the form doesn
 action's `FormData` after `onSubmit` runs, so the stamped values are the ones sent. A form that posts with `fetch`
 calls `clock.stamp(formData)` instead, which sets both fields on its `FormData`. `clock.fields()` returns them as
 `{ ts, te }`.
+
+**Timed from page load.** The clock times the first submission from when the page began to load, whenever it is
+created. A server-rendered form can be seen and typed into before React hydrates it, which on a slow phone, or inside
+a `<Suspense>` boundary, is seconds after load. Before 0.2.1 the clock started when it was created, so a person who
+typed while the page hydrated and pressed send soon after was ignored as too fast. `reset()` times the next
+submission from the moment it is called.
 
 **Why two time fields.** `ts` is the time the form opened by the device's clock, and the gate compares it with the
 server's clock. A phone whose clock runs a few minutes fast makes a person look faster than two seconds, and one

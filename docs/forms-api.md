@@ -151,8 +151,8 @@ export type { FormState, SubmitResult };
 
 The form renders the honeypot off-screen, as the live forms do, rather than with `display: none`, which some
 bots skip. The build adds `tabIndex={-1}` and `autoComplete="off"` so keyboard users and autofill stay out of it.
-`createFormClock()` is created when the form mounts, and stamps `ts` and `te` into the form when it is submitted
-(see the last section). Nothing in this entry may import a Node builtin. The package's tests include the check a
+`createFormClock()` times the form from when the page began to load, and stamps `ts` and `te` into the form when it
+is submitted (see the last section). Nothing in this entry may import a Node builtin. The package's tests include the check a
 live site already runs: build a page that renders a form, and fail if any client chunk contains server code.
 
 ### Helpers, extracted as they are
@@ -208,3 +208,9 @@ working. Its honeypot field name, `hp_website`, stays accepted as an alias.
   a usable `te`, `ts` is checked exactly as in 0.1.0**, so a form that sends only `ts` behaves as before.
   `createFormClock()` in the client entry sends both. The trap is a cheap filter for naive bots, not a security
   boundary, so it must never drop a person.
+- **The clock starts at page load (0.2.1).** In 0.2.0 `createFormClock()` started timing when it was created, which
+  is when the form hydrates. A server-rendered form can be filled before that, and on a live contact form inside a
+  `<Suspense>` boundary, hydration came 19 s after load. A person who sent the form just after it hydrated was
+  ignored as too fast while the page said "sent". The first submission is now timed from `performance.now()`'s
+  origin, the start of the navigation. `reset()` still times the next one from when it is called. The gate is
+  unchanged.
